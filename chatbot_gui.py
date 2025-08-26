@@ -51,14 +51,13 @@ def add_message(sender, message):
     chat_window.configure(state="disabled")
 
 def send_message():
-    user_msg = user_entry.get().strip()
-    if user_msg == "":
-        return
-    add_message("user", user_msg)
-    user_entry.delete(0, "end")
-    bot_msg = chatbot_response(user_msg)
-    bot_msg = smart_reply(user_msg)
-    add_message("bot", bot_msg)
+    user_msg = user_entry.get()
+    if user_msg.strip() :
+        add_message("user", user_msg)
+        user_entry.delete(0, "end")
+        bot_msg = chatbot_response(user_msg)
+        bot_msg = smart_reply(user_msg)
+        add_message("bot", bot_msg)
 
 send_button = ctk.CTkButton(input_frame, text="Send", width=80, command=send_message)
 send_button.pack(side="right", padx=(5,10), pady=5)
