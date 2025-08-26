@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from datetime import datetime
+from smart_engine import smart_reply
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("dark-blue")
@@ -56,6 +57,7 @@ def send_message():
     add_message("user", user_msg)
     user_entry.delete(0, "end")
     bot_msg = chatbot_response(user_msg)
+    bot_msg = smart_reply(user_msg)
     add_message("bot", bot_msg)
 
 send_button = ctk.CTkButton(input_frame, text="Send", width=80, command=send_message)

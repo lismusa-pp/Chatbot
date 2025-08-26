@@ -1,13 +1,28 @@
-from transformers import pipeline
+from transformers import pipeline, Conversation
 
-chatbot = pipeline("text-generation", model="gpt2")
+# Load conversational AI (BlenderBot)
+chatbot = pipeline("conversational", model="facebook/blenderbot_small-90M")
 
-def run_transformer():
-    print("Transformer Chatbot 🤖: Hello! Type 'bye' to exit.")
-    while True:
-        user = input("You: ")
-        if user.lower() == "bye":
-            print("Transformer Chatbot 🤖: Goodbye!")
-            break
-        response = chatbot(user, max_length=50, num_return_sequences=1)[0]['generated_text']
-        print("Transformer Chatbot 🤖:", response)
+# Keep track of conversation history
+conversation = Conversation()
+
+def get_bot_response(user_input: str) -> str:
+    global conversation
+    try:
+        # Add new message to the conversation
+        conversation.add_user_input(user_input)
+
+        # Generate a response
+        response = chatbot(conversation)
+
+        # Get the latest AI reply
+        reply = response.generated_responses[-1].strip()
+
+        # Fallback if reply is empty
+        if not reply:
+            reply = "Hmm, I’m not sure about that. Can you ask differently?"
+
+        return reply
+
+    except Exception as e:
+        return f"Sorry, something went wrong: {str(e)}"
